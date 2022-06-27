@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boardDAO">
+	
+	<!--
+	<select id="list" parameterType="boardVO" resultType="boardVO">
+		<![CDATA[SELECT * FROM BOARD where 1=1]]>
+		<if test="keyword != null and keyword != ''">
+		and (bookname like CONCAT('%',#{keyword},'%'))
+		</if>
+		ORDER BY seq
+	</select>
+	-->
+	<select id="list" resultType="boardVO">
+		SELECT * FROM BOARD ORDER BY seq
+	</select>
+	
+	<select id="search" parameterType="String" resultType="boardVO">
+		SELECT * FROM BOARD WHERE bookname LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<!--
+	<select id="searchAuthor" parameterType="String" resultType="boardVO">
+		SELECT * FROM BOARD WHERE author LIKE '%'||#{keyword}||'%'
+	</select>
+	-->
+	
+	<select id="select" parameterType="int" resultType="boardVO">
+		SELECT * FROM BOARD WHERE seq = #{seq}
+	</select>
+	
+	<insert id="insert" parameterType="boardVO">
+		insert into BOARD(seq, isbn, bookname, author, publisher, price, image, info)
+		values
+		(board_seq.nextval, #{isbn}, #{bookname}, #{author}, #{publisher}, #{price}, #{image}, #{info})
+		<selectKey keyProperty="seq" resultType="Integer">
+			SELECT NVL(MAX(seq), 0) FROM BOARD
+		</selectKey>
+	</insert>
+	
+</mapper>
